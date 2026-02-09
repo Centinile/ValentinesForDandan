@@ -111,6 +111,16 @@
         height: auto;
       }
 
+      .gif-fallback {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 0.6em;
+        background: var(--teal-light);
+        color: var(--teal-dark);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
       p {
         margin: 0;
         line-height: 1.7;
@@ -207,7 +217,12 @@
     <main class="card">
       <section class="flow">
         <div class="step active" data-step="1">
-          <img class="gif" src="gifs/gif1.gif" alt="Hellooo" />
+          <img
+            class="gif"
+            src="gifs/gif1.gif"
+            alt="Hellooo"
+            data-link="gifs/gif1.gif"
+          />
           <div class="content">
             <h1>
               Hi Daniellaaaa!!
@@ -222,7 +237,12 @@
         </div>
 
         <div class="step" data-step="2">
-          <img class="gif" src="gifs/gif2.gif" alt=":0000" />
+          <img
+            class="gif"
+            src="gifs/gif2.gif"
+            alt=":0000"
+            data-link="gifs/gif2.gif"
+          />
           <div class="content">
             <h1>
               Malapit na February 14!
@@ -237,7 +257,12 @@
         </div>
 
         <div class="step" data-step="3">
-          <img class="gif" src="gifs/gif3.gif" alt="huhu" />
+          <img
+            class="gif"
+            src="gifs/gif3.gif"
+            alt="huhu"
+            data-link="gifs/gif3.gif"
+          />
           <div class="content">
             <h1>
               And I just want to ask you...
@@ -256,6 +281,7 @@
             id="question-gif"
             src="gifs/gif4.gif"
             alt="Big question"
+            data-link="gifs/gif4.gif"
           />
           <div class="content">
             <h1>WILL YOU BE MY VALENTINE?</h1>
@@ -272,7 +298,12 @@
         </div>
 
         <div class="step" data-step="5">
-          <img class="gif" src="gifs/finalgif.gif" alt="Happy valentines po!!!!" />
+          <img
+            class="gif"
+            src="gifs/finalgif.gif"
+            alt="Happy valentines po!!!!"
+            data-link="gifs/finalgif.gif"
+          />
           <div class="content">
             <h1>YAYYYY!!!</h1>
             <p>Baby thank you poooo, I love you so much!</p>
@@ -285,7 +316,12 @@
         </div>
 
         <div class="step" data-step="6">
-          <img class="gif" src="gifs/plan.gif" alt="YESSS" />
+          <img
+            class="gif"
+            src="gifs/plan.gif"
+            alt="YESSS"
+            data-link="gifs/plan.gif"
+          />
           <div class="content">
             <h1>Ako na ang magpaplano!!</h1>
             <p>Yes di mo na need masyado magisip pa, ako na bahala!</p>
@@ -298,7 +334,12 @@
         </div>
 
         <div class="step" data-step="7">
-          <img class="gif" src="gifs/pack.gif" alt="Plan Time" />
+          <img
+            class="gif"
+            src="gifs/pack.gif"
+            alt="Plan Time"
+            data-link="gifs/pack.gif"
+          />
           <div class="content">
             <h1>What you need</h1>
             <ul class="list">
@@ -315,7 +356,12 @@
         </div>
 
         <div class="step" data-step="8">
-          <img class="gif" src="gifs/travel.gif" alt="Plan Time" />
+          <img
+            class="gif"
+            src="gifs/travel.gif"
+            alt="Plan Time"
+            data-link="gifs/travel.gif"
+          />
           <div class="content">
             <h1>Where we will go</h1>
             <ul class="list">
@@ -332,7 +378,12 @@
         </div>
 
         <div class="step" data-step="9">
-          <img class="gif" src="gifs/yum.gif" alt="Plan Time" />
+          <img
+            class="gif"
+            src="gifs/yum.gif"
+            alt="Plan Time"
+            data-link="gifs/yum.gif"
+          />
           <div class="content">
             <h1>Where we will eat</h1>
             <ul class="list">
@@ -349,7 +400,12 @@
         </div>
 
         <div class="step" data-step="10">
-          <img class="gif" src="gifs/huhu.gif" alt="Plan Time" />
+          <img
+            class="gif"
+            src="gifs/huhu.gif"
+            alt="Plan Time"
+            data-link="gifs/huhu.gif"
+          />
           <div class="content">
             <h1>If ever di magawa lahat ng Feb 14</h1>
             <ul class="list">
@@ -366,7 +422,12 @@
         </div>
 
         <div class="step" data-step="11">
-          <img class="gif" src="gifs/mwahh.gif" alt="Plan Time" />
+          <img
+            class="gif"
+            src="gifs/mwahh.gif"
+            alt="Plan Time"
+            data-link="gifs/mwahh.gif"
+          />
           <div class="content">
             <h1>I Love You Baby koooo</h1>
             <p>Thank you po for agreeing to see me on Valentine's. I'll try my best to make it a nice and fun day for you.</p>
@@ -391,6 +452,9 @@
       const restartButton = document.querySelector("[data-restart]");
       const questionGif = document.querySelector("#question-gif");
       const pleaText = document.querySelector("#plea-text");
+      const yesStepIndex = steps.findIndex(
+        (step) => step.dataset.step === "5"
+      );
       let currentStep = 0;
       let noCount = 0;
       const getButtonMetrics = (button) => {
@@ -409,6 +473,20 @@
         button.style.transform = "none";
         button.style.fontSize = `${base.fontSize * scale}px`;
         button.style.padding = `${base.padY * scale}px ${base.padX * scale}px`;
+      };
+
+      const attachGifFallbacks = () => {
+        document.querySelectorAll(".gif").forEach((img) => {
+          img.addEventListener("error", () => {
+            const link = document.createElement("a");
+            link.className = "gif-fallback";
+            link.href = img.dataset.link || img.src;
+            link.target = "_blank";
+            link.rel = "noopener";
+            link.textContent = "View GIF";
+            img.replaceWith(link);
+          });
+        });
       };
 
       const preloadImages = (urls) => {
@@ -497,6 +575,8 @@
         "gifs/no6.gif",
       ]);
 
+      attachGifFallbacks();
+
       const setStep = (index) => {
         steps.forEach((step, i) => {
           step.classList.toggle("active", i === index);
@@ -511,7 +591,7 @@
       });
 
       yesButton.addEventListener("click", () => {
-        setStep(4);
+        setStep(yesStepIndex >= 0 ? yesStepIndex : currentStep);
       });
 
       noButton.addEventListener("click", () => {
@@ -525,7 +605,7 @@
         applyScale(noButton, noBase, state.noScale);
         actions.classList.toggle("stacked", state.yesScale >= 2.0);
         if (noCount === 6) {
-          noButton.style.display = "none";
+          noButton.style.visibility = "hidden";
         }
       });
 
@@ -539,7 +619,7 @@
         applyScale(yesButton, yesBase, state.yesScale);
         applyScale(noButton, noBase, state.noScale);
         actions.classList.remove("stacked");
-        noButton.style.display = "";
+        noButton.style.visibility = "";
         setStep(0);
       });
     </script>
